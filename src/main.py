@@ -2,7 +2,7 @@
 PaaS - Puns as a Service
 '''
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 from pun.pun import BP as pun_route
 
 
@@ -21,14 +21,15 @@ APP = create_app()
 def hello_world():
     return 'Hello World!'
 
-from flask import Flask, send_from_directory
-
-APP = Flask(__name__, static_url_path='')
 
 @APP.route('/static/<path:path>')
 def serve_static(path):
     return send_from_directory('static', path)
 
+
+@APP.route('/dynamic/<string:name>')
+def serve_dynamic(name):
+    return render_template('template.html', name=name)
 
 if __name__ == '__main__':
     APP.run(debug=True, host='0.0.0.0')
