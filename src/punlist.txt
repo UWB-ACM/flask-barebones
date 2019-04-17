@@ -7,4 +7,3 @@ There are 10 types of people in the world; those who understand binary and those
 There are two types of people in the world; those who can extrapolate from incomplete data.
 "Computer science" isn't really about computers. And it isn't really a science. But here we are anyways.
 The worst thing you can do at a SQL dinner party is clear the table.
-
