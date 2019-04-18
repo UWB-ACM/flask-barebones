@@ -5,7 +5,7 @@ Uses the power of Python Flask to deliver puns through the internet.
 
 """
 
-from flask import Flask, send_from_directory, render_template
+from flask import Flask, send_from_directory, render_template, jsonify
 from pun.pun import BP as pun_route
 
 def create_app():
@@ -32,7 +32,20 @@ def index():
 
 @APP.route("/test")
 def testing():
+    """
+    A really simple route
+    """
     return "Hello Flask!"
+
+@APP.route("/json")
+def testing_json():
+    """
+    An example of a route that returns JSON
+    """
+    return jsonify({
+        "wow": "You can use Flask to return JSON!",
+        "howCoolIsJSON": 9001
+    })
 
 @APP.route('/static/<path:path>')
 def serve_static(path):
