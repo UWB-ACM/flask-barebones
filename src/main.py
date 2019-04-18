@@ -23,9 +23,6 @@ APP = create_app()
 @APP.route("/")
 def index():
     """
-    /
-    /index.html
-
     Responds with the "Hello World" page for the default endpoint.
     """
     return send_from_directory("static", filename="hello.html")
@@ -55,7 +52,7 @@ def serve_static(path):
     return send_from_directory('static', path)
 
 @APP.route('/hello')
-@APP.route('/hello/<name>')
+@APP.route('/hello/<string:name>')
 def hello(name = "Anonymous"):
     """
     /hello
