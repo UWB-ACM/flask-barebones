@@ -1,39 +1,54 @@
+"""
+Endpoints for the PaaS application which are specific to serving puns
+"""
+
 import random
 
+from flask import Blueprint, send_from_directory, abort
 
-from flask import Blueprint
-
-
+# all of the routes defined in this file will be under /pun
 BP = Blueprint('pun', __name__, url_prefix='/pun')
 
+def get_puns(fpath):
+    """
+    Gets the list of puns from a file
+    """
+    with open(fpath) as punny_boi:
+        puns_file = punny_boi.read()
+        puns = puns_file.splitlines()
+        return puns
 
-def get_quotes(fpath):
-    '''Gets the list of quotes from a local file'''
-    with open(fpath) as quotey_boi:
-        quotes_file = quotey_boi.read()
-        quotes = quotes_file.splitlines()
-        return quotes
+puns = get_puns('punlist.txt')
 
+@BP.route('/', methods=['GET'])
+@BP.route('index.html', methods=['GET'])
+def root():
+    """
+    Serves the homepage.
+    """
+    # the home page for /pun is under static/pun_home.html
+    return send_from_directory('static', filename="pun_home.html")
 
-QUOTES = get_quotes('punlist.txt')
+@BP.route('/random', methods=['GET'])
+def random_pun():
+    """
+    /pun/random
 
+    Returns a random pun from the entire list of puns
+    """
+    return puns[random.randint(0, len(puns)-1)]
 
-@BP.route('/')
-def get_pun():
-    return 'Punishment'
+@BP.route('/<int:id>', methods=['GET'])
+def pun_by_id(id: int):
+    """
+    /pun/<id>
 
-
-# consider rate limiting this endpoint?
-@BP.route('/quote', methods=['GET'])
-def quote():
-    '''
-    /quote endpoint
-    Returns a random quote
-    Only works with the GET method
-    :return:
-    '''
-
-    # debug
-    print('got', len(QUOTES), 'lines')
-
-    return QUOTES[random.randint(0, len(QUOTES)-1)]
+    Gets a pun by the ID.
+    Invalid IDs respond with a 404 Not Found error.
+    """
+    # check if id is in valid range
+    if 0 <= id < len(puns):
+        # valid, return the pun
+        return puns[id]
+    # else return a 404
+    return abort(404)
