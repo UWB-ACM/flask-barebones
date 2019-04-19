@@ -14,7 +14,7 @@ def create_app():
     """
     app = Flask(__name__, static_url_path='')
     # blueprints allow our logic to be separated among different files
-    app.register_blueprint(pun_route)
+    app.register_blueprint(pun_route, url_prefix='/pun')
     return app
 
 APP = create_app()
